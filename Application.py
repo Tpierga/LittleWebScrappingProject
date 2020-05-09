@@ -5,65 +5,109 @@ Created on Wed May  6 20:07:31 2020
 @author: thiba
 """
 import tkinter as tk
+from tkinter import ttk
 import matplotlib
 matplotlib.use("TkAgg")
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from My_Data import *
 
 
-class App(tk.Tk, top_gainers_dict):
+TITLE = ("OCR A Extended", 14)
+
+class App(tk.Tk):
+    """
+    Here is the logic behind the app
+    The other classes below are the pages
+    """
     
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         
-        tk.Tk.__init__(self)
+        tk.Tk.__init__(self, *args, **kwargs)
         
-        tk.Tk.wm_title(self, "tkinter app displaying graphs")
+        tk.Tk.iconbitmap(self, default ="esmeicon3.ico")
         
+        tk.Tk.wm_title(self, "COVID 19 Time to bet money!")
         container = tk.Frame(self)
         container.pack(side = "top", fill = "both", expand = "True")
+        
+        container.grid_rowconfigure(0, weight = 1)
+        container.grid_columnconfigure(0, weight = 1)
+        
         self.frames = {}
-        frame = Graphs(container, self)
-        self.frames[Graphs] = frame
         
-        self.show_frame(Graphs)
+        for F in (HomePage, PageOne, Graphs):
+
+            frame = F(container, self)
+            
+            self.frames[F] = frame
+            
+            frame.grid(row=0, column = 0, sticky="nsew")
         
-    def show_frame(self, cont):
+        self.show_frame(HomePage)        
         
-        frame = self.frames[cont]
-        frame.tkraise()
+        
+    def show_frame(self, page_name):
+        # Here we move to the top the frame that is called in argument of the function
+        front_frame = self.frames[page_name]
+        front_frame.tkraise()
+        
+
+class HomePage(tk.Frame):
+    """
+    The first page displayed
+    """
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text = "Home Page", font = TITLE)
+        label.pack(pady=10, padx=10)
+        
+        button_page_one = ttk.Button(self, text = "Go to page One", 
+                                     command = lambda: controller.show_frame(PageOne))
+        button_page_one.pack()
+        
+        button_bar_chart = ttk.Button(self, text = "Display bar chart", 
+                                     command = lambda: controller.show_frame(Graphs))
+        button_bar_chart.pack()
+
+class PageOne(tk.Frame):
+    """
+    This is page one
+    """
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Page ONE", font=TITLE)
+        label.pack(pady=10, padx=10)
+        
+        button_home = ttk.Button(self, text = "Home Button", 
+                                     command = lambda: controller.show_frame(HomePage))
+        button_home.pack()
 
 
 class Graphs(tk.Frame):
-    
+    """
+    This page has a matplotlib bar chart embedded
+    """
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Graph Page!")
         label.pack(pady=10, padx=10)
-        
-        #button = ttk.Button(self, text="Afficher Graphs", command = lambda:controller.show_frame(StartPage))
-        #button.pack
+        data = My_Data()
+        data.today_refresh()
+
+        button = ttk.Button(self, text="Home Button", command = lambda:controller.show_frame(HomePage))
+        button.pack()
         
         f = Figure(figsize=(5,5), dpi=100)
-        colors = ["blue", "red", "green", "orange", "yellow", "brown", "black"]
-
-        X = df['Date']
-        for i,k in enumerate(sorted_e_dict.keys()):
-            Y = df[k]
-            plt.plot(X,Y, c = colors[i], label = k)
-
-
-        #Y = df['Total (MW)']
-        #plt.plot(X,Y, c = 'pink', label = 'Total (MW)')
-        plt.xticks(range(0,len(df), 20), rotation = 90)
-        plt.title('The amount of energy produced during the day')
-        plt.xlabel('time')
-        plt.ylabel('Energie Produced (MW)')
-        plt.legend( loc = "upper left")
-        plt.show()
+        a = f.add_subplot(111)
+        data.bar_chart_one_day("05_08", a)
+        
 
         canvas = FigureCanvasTkAgg(f, self)
         canvas.draw()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+        
         
         
         
