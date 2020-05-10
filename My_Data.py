@@ -12,8 +12,7 @@ import pandas as pd
 import os
 import os.path
 import re
-import matplotlib.pyplot as plt
-import numpy as np
+
 
 class My_Data():
     """
@@ -69,7 +68,6 @@ class My_Data():
     
         today_top_gainers.to_csv("DATA\\"+ today_key + "_top_gainers.csv", sep = ";", index = False)
     
-  
     
     def load_top_gainers_from_csv(self):
         # We are getting values for today and store it in dict object on the model{day:dataframe}  
@@ -104,10 +102,11 @@ class My_Data():
             print("unknown error")
             return False
         
-    def bar_chart_one_day(self, day_key, a):
+    def bar_chart_one_day(self, day_key):
         # Displays a bar chart corresponding to average
         # of columns CHG% for each sector of activity
         # called to display graph inside application
+        
         try : 
             df = self.dict_lastdays_top[day_key]
         except:
@@ -123,16 +122,8 @@ class My_Data():
                     mean_l.append(float(df['CHG%'][i][:-1]))
             m = sum(mean_l)/max(len(mean_l),1)
             y.append(m)
-            
-        x = np.arange(len(X_names))
         
-        a.bar(x, height = y)
-        
-        a.set_xticks(x)
-        a.set_xticklabels(X_names, rotation = 90)
-        a.set_ylabel("mean CHG% by sector")
-        a.set_xlabel("sector of activity")
-        a.set_title("Bar chart of sector with most change among Top Gainers")
+        return X_names, y
 
             
     def get_dict(self):

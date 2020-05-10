@@ -12,6 +12,8 @@ matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from My_Data import *
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 TITLE = ("OCR A Extended", 14)
@@ -21,7 +23,6 @@ class App(tk.Tk):
     Here is the logic behind the app
     The other classes below are the pages
     """
-    
     def __init__(self, *args, **kwargs):
         
         tk.Tk.__init__(self, *args, **kwargs)
@@ -46,7 +47,6 @@ class App(tk.Tk):
             frame.grid(row=0, column = 0, sticky="nsew")
         
         self.show_frame(HomePage)        
-        
         
     def show_frame(self, page_name):
         # Here we move to the top the frame that is called in argument of the function
@@ -83,7 +83,7 @@ class PageOne(tk.Frame):
         button_home = ttk.Button(self, text = "Home Button", 
                                      command = lambda: controller.show_frame(HomePage))
         button_home.pack()
-
+        
 
 class Graphs(tk.Frame):
     """
@@ -101,12 +101,59 @@ class Graphs(tk.Frame):
         
         f = Figure(figsize=(5,5), dpi=100)
         a = f.add_subplot(111)
-        data.bar_chart_one_day("05_08", a)
+        X_names, y = data.bar_chart_one_day("05_08")
         
-
+        x = np.arange(len(X_names))
+        a.bar(x, height = y)
+        
+        a.set_xticks(x)
+        a.set_xticklabels(X_names, rotation = 90)
+        a.set_ylabel("mean CHG% by sector")
+        a.set_xlabel("sector of activity")
+        a.set_title("Bar chart of sector with most change among Top Gainers")
+        
         canvas = FigureCanvasTkAgg(f, self)
         canvas.draw()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
