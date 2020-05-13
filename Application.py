@@ -7,13 +7,17 @@ Created on Wed May  6 20:07:31 2020
 import tkinter as tk
 from tkinter import ttk
 import matplotlib
+import time
+from threading import Thread
 matplotlib.use("TkAgg")
+from selenium import webdriver
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from My_Data import *
-from Selenium_data import *
+
 import matplotlib.pyplot as plt
 import numpy as np
+
 TITLE = ("OCR A Extended", 14)
 
 update_graph = False
@@ -226,8 +230,9 @@ class Graph_dynam(tk.Frame):
                 #display the graph in red
                 a.plot(x[:nb_plot_counter], y[:nb_plot_counter],marker='*',linestyle = 'dashed', linewidth = 2, color = 'red')  # créer une nouvelle ligne
                 #set the x axis and change the orientation of values
-                a.set_xticklabels(x[:nb_plot_counter], rotation = 60)
+                a.set_xticklabels(x[:nb_plot_counter], rotation = 50)
                 #draw the graph
+                a.tick_params(axis ='both',which='major',labelsize=9)
                 canvas.draw()
             #if the last value is equal than the previous one 
             if y[nb_plot_counter-1] == y[nb_plot_counter-2]:
@@ -235,7 +240,8 @@ class Graph_dynam(tk.Frame):
                 texte_etat_var.set("the value of BTC don't change")
                 #color in gray
                 a.plot(x[:nb_plot_counter], y[:nb_plot_counter],marker='*',linestyle = 'dashed', linewidth = 2, color = 'gray')  # créer une nouvelle ligne
-                a.set_xticklabels(x[:nb_plot_counter], rotation = 60)
+                a.set_xticklabels(x[:nb_plot_counter], rotation = 50)
+                a.tick_params(axis ='both',which='major',labelsize=9)
                 canvas.draw()
             #if the last value is greater than the previous one 
             if y[nb_plot_counter-1] > y[nb_plot_counter-2]:
@@ -243,7 +249,8 @@ class Graph_dynam(tk.Frame):
                 texte_etat_var.set("the value of BTC increase")
                 #color in green
                 a.plot(x[:nb_plot_counter], y[:nb_plot_counter],marker='*',linestyle = 'dashed', linewidth = 2, color = 'green')  # créer une nouvelle ligne
-                a.set_xticklabels(x[:nb_plot_counter], rotation = 60)
+                a.set_xticklabels(x[:nb_plot_counter], rotation = 50)
+                a.tick_params(axis ='both',which='major',labelsize=9)
                 canvas.draw()
             #call refresh method in 5 ms
             self.after(5000, refresh)  
