@@ -43,15 +43,18 @@ class App(tk.Tk):
             self.frames[F] = frame
             frame.grid(row=0, column = 0, sticky="nsew")
         self.show_frame(HomePage)
+        
     def show_frame(self, page_name):
         # Here we move to the top the frame that is called in argument of the function
         front_frame = self.frames[page_name]
         front_frame.tkraise()
+        
 class HomePage(tk.Frame):
     """
     The first page displayed
     """
     def __init__(self, parent, controller):
+        
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text = "Home Page", font = TITLE)
         label.pack(pady=10, padx=10)
@@ -71,6 +74,7 @@ class HomePage(tk.Frame):
         signature = tk.Label(frame2,text ="Application de Thibault Pierga et Yoann Randon",font =TITLE)
         signature.pack(side='top')
         frame2.pack(side='bottom')
+        
 class PageOne(tk.Frame):
     """
     This is page one
@@ -81,10 +85,8 @@ class PageOne(tk.Frame):
         label.pack(pady=10, padx=10)
         button_home = ttk.Button(self, text = "Home Button",
                                      command = lambda: controller.show_frame(HomePage))
-        button_bar_chart = ttk.Button(self, text = "Display plot chart",
-                                     command = lambda: controller.show_frame(Graph_dynam))
         button_home.pack()
-        button_bar_chart.pack()
+        
 class Graphs(tk.Frame):
     """
     This page has a matplotlib bar chart embedded
@@ -170,8 +172,8 @@ class Graph_dynam(tk.Frame):
             global update_scrap
             #Until the flag say you are scraping
             while update_scrap:
-                #wait 5 second
-                time.sleep(5)
+                #wait 10 second
+                time.sleep(10)
                 #get the element in the website with the class "price"
                 price = driver.find_element_by_class_name("price")
                 #print this value
@@ -264,7 +266,7 @@ class Graph_dynam(tk.Frame):
                 a.tick_params(axis ='both',which='major',labelsize=9)
                 canvas.draw()
             #call refresh method in 5 ms
-            self.after(5000, refresh)  
+            self.after(10000, refresh)  
         
                 
        
