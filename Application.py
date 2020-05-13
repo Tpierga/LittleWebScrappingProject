@@ -55,12 +55,22 @@ class HomePage(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text = "Home Page", font = TITLE)
         label.pack(pady=10, padx=10)
-        button_page_one = ttk.Button(self, text = "Go to page One",
+        frame1 = tk.Frame(self)
+        frame2 = tk.Frame(self)
+        button_page_one = ttk.Button(frame1, text = "Go to page One",
                                      command = lambda: controller.show_frame(PageOne))
-        button_page_one.pack()
-        button_bar_chart = ttk.Button(self, text = "Display bar chart",
+        button_page_one.pack(side ='left')
+        button_bar_chart = ttk.Button(frame1, text = "Display bar chart",
                                      command = lambda: controller.show_frame(Graphs))
-        button_bar_chart.pack()
+        button_bar_chart.pack(side ='left')
+        button_bar_chart = ttk.Button(frame1, text = "Display plot chart",
+                                     command = lambda: controller.show_frame(Graph_dynam))
+        button_bar_chart.pack(side ='left')
+        frame1.pack(side='top')
+        
+        signature = tk.Label(frame2,text ="Application de Thibault Pierga et Yoann Randon",font =TITLE)
+        signature.pack(side='top')
+        frame2.pack(side='bottom')
 class PageOne(tk.Frame):
     """
     This is page one
